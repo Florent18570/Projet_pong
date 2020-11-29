@@ -26,6 +26,32 @@
 
 import sys
 import pygame
+import socket
+import time
+import os
+import time
+import threading
+from pygame import mixer
+
+##############
+############################################
+#Création du serveur 
+HOST = "localhost"
+PORT = 9004
+connexion = None
+ball_envoie = None
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(2)
+print("Le serveur est mise en route")
+
+#Tant qu'il y a pas de client qui se connect sur le server
+while connexion == None:
+    connexion, adresse = s.accept()   #le programme attend le client 
+    print("Une personne est connecter avec pour ip {0} et pour port {1}".format(adresse[0],adresse[1]))
+###########################################
+###############################################################
 
 # Screen setup
 
