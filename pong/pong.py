@@ -68,11 +68,14 @@ pygame.init()
 screen = pygame.display.set_mode( (width, height) )
 
 # Load resources
-ball = pygame.image.load("image/ball.png")
+ball = pygame.image.load("ressources/image/ball.png")
 ball_coords = ball.get_rect()
 
-racket = pygame.image.load("image/racket.png")
-racket_coords = racket.get_rect()
+racket_gauche = pygame.image.load("ressources/image/racket.png")
+racket_coords_gauche = racket_gauche.get_rect()
+
+racket_droite = pygame.image.load("ressources/image/racket.png")
+racket_coords_droite = racket_droite.get_rect()
 
 # Throw ball from center
 def throw():
@@ -86,22 +89,22 @@ while True:
         # Check for exit
         if e.type == pygame.QUIT:
             sys.exit()
-
+    
         # Check for racket movements
         elif e.type == pygame.KEYDOWN:
             if e.key == pygame.K_UP:
-                racket_speed[1] = -4
+                racket_speed_gauche[1] = -4
                 pass
             elif e.key == pygame.K_DOWN:
-                racket_speed[1] = 4
+                racket_speed_gauche[1] = 4
                 pass
 
         elif e.type == pygame.KEYUP:
             if e.key == pygame.K_UP:
-                racket_speed[1] = 0
+                racket_speed_gauche[1] = 0
                 pass
             elif e.key == pygame.K_DOWN:
-                racket_speed[1] = 0
+                racket_speed_gauche[1] = 0
                 pass
 
         #else:
@@ -109,6 +112,8 @@ while True:
 
     # Move ball
     ball_coords = ball_coords.move(ball_speed)
+
+
     # Bounce ball on walls
     if ball_coords.left < 0 or ball_coords.right >= width:
         ball_speed[0] = -ball_speed[0]
@@ -118,14 +123,24 @@ while True:
     # Move racket
     racket_coords = racket_coords.move(racket_speed)
     # Clip racket on court
-    if racket_coords.left < 0:
-        racket_coords.left = 0
-    elif racket_coords.right >= width:
-        racket_coords.right = width-1
-    if racket_coords.top < 0:
-        racket_coords.top = 0
-    elif racket_coords.bottom >= height:
-        racket_coords.bottom = height-1
+    
+    if racket_coords_droite.left == width:
+        racket_coords_droite.left = 0
+    elif racket_coords_droite.right >= width:
+        racket_coords_droite.right = width - 1
+    if racket_coords_droite.top < 0:
+        racket_coords_droite.top = 0
+    elif racket_coords_droite.bottom >= height:
+        racket_coords_droite.bottom = height - 1
+
+    if racket_coords_gauche.left < 0:
+        racket_coords_gauche.left = 0
+    elif racket_coords_gauche.right >= width:
+        racket_coords_gauche.right = width - 1
+    if racket_coords_gauche.top < 0:
+        racket_coords_gauche.top = 0
+    elif racket_coords_gauche.bottom >= height:
+        racket_coords_gauche.bottom = height - 1
 
     # Racket reached racket position?
     if ball_coords.left <= 0:
