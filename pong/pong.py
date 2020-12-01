@@ -148,11 +148,12 @@ while True:
             print("lost!")
             throw()
 
-    # Display everything
+# affichage
     screen.fill(clay)
     screen.blit(ball, ball_coords)
-    screen.blit(racket, racket_coords)
+    screen.blit(racket_gauche, racket_coords_gauche)
     pygame.display.flip()
+    
 
     # sleep 10ms, since there is no need for more than 100Hz refresh :)
     pygame.time.delay(10)
