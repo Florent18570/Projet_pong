@@ -164,6 +164,11 @@ while True:
     connexion.send(ball_envoie.encode('utf-8'))
 
     #############
+
+    racketx = racket_coords_gauche.x
+    rackety = racket_coords_gauche.y
+    a = "coordonéeRocketgauche" + ":" + str(racketx) + ":" + str(rackety) + ":"
+    connexion.send(a.encode('utf-8'))
     
 
     # sleep 10ms, since there is no need for more than 100Hz refresh :)
