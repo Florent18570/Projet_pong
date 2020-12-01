@@ -154,6 +154,17 @@ while True:
     screen.blit(racket_gauche, racket_coords_gauche)
     pygame.display.flip()
     
+     
+    ##############
+    #Envoie de données de la balle
+    ballx = ball_coords.x
+    bally = ball_coords.y
+
+    ball_envoie = "ball" + ":" + str(ballx) + ":" + str(bally) + ":"
+    connexion.send(ball_envoie.encode('utf-8'))
+
+    #############
+    
 
     # sleep 10ms, since there is no need for more than 100Hz refresh :)
     pygame.time.delay(10)
