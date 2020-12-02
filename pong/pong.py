@@ -164,6 +164,25 @@ while True:
     connexion.send(ball_envoie.encode('utf-8'))
 
     #############
+       # reception rackette droite
+    recu = connexion.recv(1024).decode('utf-8')
+    spliter = recu.split(":")
+    # print(spliter)
+    toutslesmot = spliter
+    premierMot = toutslesmot[0]
+
+    if premierMot == "coordonéeRocketdroite":
+        raquettex = int(toutslesmot[1])
+        raquettey = int(toutslesmot[2])
+
+        # print(raquettex)
+        # print(raquettey)
+
+        racket_coords_droite.x = 760
+        racket_coords_droite.y = raquettey
+        # print(racket_coords_droite)
+        screen.blit(racket_droite, racket_coords_droite)
+    #############
 
     racketx = racket_coords_gauche.x
     rackety = racket_coords_gauche.y
