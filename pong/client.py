@@ -78,3 +78,16 @@ def show_score(x,y):
     score = font.render("Score : " + str(score_droite) + " / "  + str(score_gauche),True,(255,255,255))
     screen.blit(score,(x,y))
 
+# Lance la balle
+def throw():
+    ball_coords.left = 531
+    ball_coords.top = 298
+
+throw()
+
+# Le joueur à perdu
+def ball_lost():
+    if ball_coords.left <= 0:
+        if ball_coords.bottom <= racket_coords_gauche.top or ball_coords.top >= racket_coords_gauche.bottom:
+            print("lost!")
+            throw()
