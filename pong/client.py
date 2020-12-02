@@ -91,3 +91,70 @@ def ball_lost():
         if ball_coords.bottom <= racket_coords_gauche.top or ball_coords.top >= racket_coords_gauche.bottom:
             print("lost!")
             throw()
+
+# Boucle Principale
+while True:
+    for e in pygame.event.get():
+        # Check for exit
+        if e.type == pygame.QUIT:
+            sys.exit()
+        # touches joueur
+        if e.type == pygame.KEYDOWN:
+            if e.key == pygame.K_LEFT:
+                racket_speed_droite[1] = -4
+                pass
+            elif e.key == pygame.K_RIGHT:
+                racket_speed_droite[1] = 4
+                pass
+
+        if e.type == pygame.KEYUP:
+            if e.key == pygame.K_LEFT:
+                racket_speed_droite[1] = 0
+                pass
+            elif e.key == pygame.K_RIGHT:
+                racket_speed_droite[1] = 0
+                pass
+
+
+    # rebonds balles sur les murs
+    if ball_coords.left < 0 or ball_coords.right >= width:
+        ball_speed[0] = -ball_speed[0]
+    if ball_coords.top < 0 or ball_coords.bottom >= height:
+        ball_speed[1] = -ball_speed[1]
+
+    # Mouvements raquettes racket
+    racket_coords_droite = racket_coords_droite.move(racket_speed_droite)
+    racket_coords_gauche = racket_coords_gauche.move(racket_speed_gauche)
+
+    # Racket reached racket position?
+    if ball_coords.left <= 0:
+        if ball_coords.bottom <= racket_coords_gauche.top or ball_coords.top >= racket_coords_gauche.bottom:
+            score_gauche = score_gauche + 1
+            # print(score_value_rackette_gauche)
+            print("lost Joueur gauche")
+
+    # Racket reached racket position?
+    if ball_coords.left >= 780:
+        if ball_coords.bottom <= racket_coords_droite.top or ball_coords.top >= racket_coords_droite.bottom:
+            score_droite = score_droite + 1
+            # print(score_value_rackette_droite)
+            print(score_droite)
+
+        # accrochage raquettes sur l'ecran
+    if racket_coords_droite.left < 0:
+        racket_coords_droite.left = 0
+    elif racket_coords_droite.right >= width:
+        racket_coords_droite.right = width - 1
+    if racket_coords_droite.top < 0:
+        racket_coords_droite.top = 0
+    elif racket_coords_droite.bottom >= height:
+        racket_coords_droite.bottom = height - 1
+
+    if racket_coords_gauche.left < 0:
+        racket_coords_gauche.left = 0
+    elif racket_coords_gauche.right >= width:
+        racket_coords_gauche.right = width - 1
+    if racket_coords_gauche.top < 0:
+        racket_coords_gauche.top = 0
+    elif racket_coords_gauche.bottom >= height:
+        racket_coords_gauche.bottom = height - 1
