@@ -206,3 +206,33 @@ while True:
                 ball_coords.x = x+4
             ball_coords.y = y
             screen.blit(ball_load, ball_coords)
+        #########################################################
+        #########################################################
+        # reception racketgauche
+        if premierMot == "coordonéeRocketgauche":
+            raquettex = int(toutslesmot[1])
+            raquettey = int(toutslesmot[2])
+
+            racket_coords_gauche.x = raquettex
+            racket_coords_gauche.y = raquettey
+            screen.blit(racket_gauche, racket_coords_gauche)
+
+        #########################################################
+        #########################################################
+        #Envoie de données de la rackette droite
+
+        racketx = racket_coords_droite.x = 800
+        rackety = racket_coords_droite.y
+        a = "coordonéeRocketdroite" + ":" + str(racketx) + ":" + str(rackety) + ":"
+        s.send(a.encode('utf-8'))
+
+
+    #########################################################
+    #########################################################
+
+    pygame.display.flip()
+    # sleep 10ms, since there is no need for more than 100Hz refresh :)
+    pygame.time.delay(10)
+
+# fermeture connexion
+socket.close()
