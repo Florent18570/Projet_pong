@@ -158,3 +158,29 @@ while True:
         racket_coords_gauche.top = 0
     elif racket_coords_gauche.bottom >= height:
         racket_coords_gauche.bottom = height - 1
+
+        # Win
+    if score_gauche == 3:
+        score_gauche = 0
+        score_droite = 0
+        screen.blit(win, (0, 0))
+        pygame.display.flip()
+
+
+        # Game over
+    elif score_droite == 3:
+        score_droite = 0
+        score_gauche = 0
+        screen.blit(gameover, (0, 0))
+        pygame.display.flip()
+
+
+    else:
+
+        # affichage
+        screen.fill([255, 255, 255])
+        screen.blit(background, (0, 0))
+        screen.blit(ball_load, ball_coords)
+        screen.blit(racket_droite, racket_coords_droite)
+        show_score(textX, textY)
+
