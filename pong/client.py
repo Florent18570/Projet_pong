@@ -184,3 +184,25 @@ while True:
         screen.blit(racket_droite, racket_coords_droite)
         show_score(textX, textY)
 
+    #########################################################
+    #########################################################
+    for i in range(3):
+        recu = s.recv(1024).decode('utf-8')
+        spliter =recu.split(":")
+        # print(spliter)
+        toutslesmot = spliter
+        premierMot = toutslesmot[0]
+
+        #########################################################
+        #########################################################
+        # reception ball
+        if premierMot == "ball":
+            x = int(toutslesmot[1])
+            y = int(toutslesmot[2])
+
+            if ball_coords.x <= 400:
+                ball_coords.x = x-4
+            else:
+                ball_coords.x = x+4
+            ball_coords.y = y
+            screen.blit(ball_load, ball_coords)
