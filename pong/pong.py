@@ -74,6 +74,11 @@ ball_coords = ball.get_rect()
 racket_gauche = pygame.image.load("ressources/image/racket.png")
 racket_coords_gauche = racket_gauche.get_rect()
 
+#background sound
+pygame.mixer.music.load('ressources/musique.wav')
+pygame.mixer.music.play()
+
+
 racket_droite = pygame.image.load("ressources/image/racket.png")
 racket_coords_droite = racket_droite.get_rect()
 
