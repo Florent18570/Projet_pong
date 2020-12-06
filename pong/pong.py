@@ -77,6 +77,14 @@ racket_coords_gauche = racket_gauche.get_rect()
 racket_droite = pygame.image.load("ressources/image/racket.png")
 racket_coords_droite = racket_droite.get_rect()
 
+#GameOver
+gameover = pygame.image.load("ressources/image/Gameover.jpg")
+gameover = pygame.transform.scale(gameover,(800,600))
+
+#Win
+win = pygame.image.load("ressources/image/win.jpg")
+win = pygame.transform.scale(win,(800,600))
+
 # Throw ball from center
 def throw():
     ball_coords.left = 2*width/3
@@ -148,15 +156,36 @@ while True:
             print("lost!")
             throw()
 
-# affichage
-    screen.fill(clay)
-    screen.blit(ball, ball_coords)
-    screen.blit(racket_gauche, racket_coords_gauche)
-    pygame.display.flip()
-    
-     
+
+    # Win
+    if score_value_rackette_droite == 3:
+        score_value_rackette_gauche = 0
+        score_value_rackette_droite = 0
+        screen.blit(win, (0, 0))
+        pygame.display.flip()
+        time.sleep(1)
+        pygame.time.delay(5000)
+
+    # Game over
+    elif score_value_rackette_gauche == 3:
+        score_value_rackette_gauche = 0
+        score_value_rackette_droite = 0
+        screen.blit(gameover, (0, 0))
+        pygame.display.flip()
+        pygame.time.delay(5000)
+
+    else:
+        # affichage
+        screen.fill([255, 255, 255])
+        screen.blit(background, (0, 0))
+        screen.blit(ball, ball_coords)
+        screen.blit(racket_gauche, racket_coords_gauche)
+        show_score(textX, textY)
+
+    ##########################################
     ##############
-    #Envoie de données de la balle
+    #Envoie de données
+
     ballx = ball_coords.x
     bally = ball_coords.y
 
@@ -164,7 +193,9 @@ while True:
     connexion.send(ball_envoie.encode('utf-8'))
 
     #############
-       # reception rackette droite
+    ##########################################
+
+    # reception rackette droite
     recu = connexion.recv(1024).decode('utf-8')
     spliter = recu.split(":")
     # print(spliter)
@@ -182,13 +213,13 @@ while True:
         racket_coords_droite.y = raquettey
         # print(racket_coords_droite)
         screen.blit(racket_droite, racket_coords_droite)
-    #############
+
 
     racketx = racket_coords_gauche.x
     rackety = racket_coords_gauche.y
     a = "coordonéeRocketgauche" + ":" + str(racketx) + ":" + str(rackety) + ":"
     connexion.send(a.encode('utf-8'))
-    
+
 
     # sleep 10ms, since there is no need for more than 100Hz refresh :)
     pygame.time.delay(10)
