@@ -2,7 +2,7 @@
 
 # Copyright (c) 2017, 2020 Samuel Thibault <samuel.thibault@ens-lyon.org>
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -11,7 +11,7 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY Samuel Thibault ``AS IS'' AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,7 +35,6 @@ from pygame import mixer
 
 ##############
 ############################################
-#Création du serveur 
 HOST = "localhost"
 PORT = 9004
 connexion = None
@@ -46,9 +45,8 @@ s.bind((HOST, PORT))
 s.listen(2)
 print("Le serveur est mise en route")
 
-#Tant qu'il y a pas de client qui se connect sur le server
 while connexion == None:
-    connexion, adresse = s.accept()   #le programme attend le client 
+    connexion, adresse = s.accept()
     print("Une personne est connecter avec pour ip {0} et pour port {1}".format(adresse[0],adresse[1]))
 ###########################################
 ###############################################################
@@ -58,29 +56,32 @@ while connexion == None:
 width = 800
 height = 600
 
-clay = (0xFF, 0x40, 0)
+
+new_value = 0
 
 ball_speed = [ -2, -2 ]
-racket_speed = [ 0, 0 ]
+racket_speed_gauche = [0, 0]
 
 # Pygame initialization
 pygame.init()
 screen = pygame.display.set_mode( (width, height) )
 
 # Load resources
+
+background = pygame.image.load("ressources/image/background.png")
+
 ball = pygame.image.load("ressources/image/ball.png")
 ball_coords = ball.get_rect()
 
 racket_gauche = pygame.image.load("ressources/image/racket.png")
 racket_coords_gauche = racket_gauche.get_rect()
 
+racket_droite = pygame.image.load("ressources/image/racket.png")
+racket_coords_droite = racket_droite.get_rect()
+
 #background sound
 pygame.mixer.music.load('ressources/musique.wav')
 pygame.mixer.music.play()
-
-
-racket_droite = pygame.image.load("ressources/image/racket.png")
-racket_coords_droite = racket_droite.get_rect()
 
 #GameOver
 gameover = pygame.image.load("ressources/image/Gameover.jpg")
@@ -90,10 +91,23 @@ gameover = pygame.transform.scale(gameover,(800,600))
 win = pygame.image.load("ressources/image/win.jpg")
 win = pygame.transform.scale(win,(800,600))
 
+#score
+score_value_rackette_gauche = 0
+score_value_rackette_droite = 0
+font = pygame.font.Font('freesansbold.ttf',32)
+
+textX = 300
+textY = 30
+
+def show_score(x,y):
+    score = font.render("Score : " + str(score_value_rackette_droite) + " / "  +str(score_value_rackette_gauche),True,(255,255,255))
+    screen.blit(score,(x,y))
+
+
 # Throw ball from center
 def throw():
-    ball_coords.left = 2*width/3
-    ball_coords.top = height/2
+    ball_coords.left = 531
+    ball_coords.top = 298
 
 throw()
 
@@ -120,12 +134,8 @@ while True:
                 racket_speed_gauche[1] = 0
                 pass
 
-        #else:
-        #    print(e)
-
     # Move ball
     ball_coords = ball_coords.move(ball_speed)
-
 
     # Bounce ball on walls
     if ball_coords.left < 0 or ball_coords.right >= width:
@@ -134,9 +144,28 @@ while True:
         ball_speed[1] = -ball_speed[1]
 
     # Move racket
-    racket_coords = racket_coords.move(racket_speed)
-    # Clip racket on court
-    
+    racket_coords_gauche = racket_coords_gauche.move(racket_speed_gauche)
+
+
+    # Racket reached racket position?
+    if ball_coords.left <= 0:
+        if ball_coords.bottom <= racket_coords_gauche.top or ball_coords.top >= racket_coords_gauche.bottom:
+            score_value_rackette_gauche = score_value_rackette_gauche + 1
+            # print(score_value_rackette_gauche)
+            print("lost Joueur gauche")
+            throw()
+
+
+
+    # Racket reached racket position?
+    if ball_coords.left >= 780:
+        if ball_coords.bottom <= racket_coords_droite.top or ball_coords.top >= racket_coords_droite.bottom:
+            score_value_rackette_droite = score_value_rackette_droite + 1
+            # print(score_value_rackette_droite)
+            print("lost Joueur droite!")
+            throw()
+
+        # Clip racket on court
     if racket_coords_droite.left == width:
         racket_coords_droite.left = 0
     elif racket_coords_droite.right >= width:
@@ -155,12 +184,7 @@ while True:
     elif racket_coords_gauche.bottom >= height:
         racket_coords_gauche.bottom = height - 1
 
-    # Racket reached racket position?
-    if ball_coords.left <= 0:
-        if ball_coords.bottom <= racket_coords.top or ball_coords.top >= racket_coords.bottom:
-            print("lost!")
-            throw()
-
+    pygame.display.flip()
 
     # Win
     if score_value_rackette_droite == 3:
@@ -228,3 +252,7 @@ while True:
 
     # sleep 10ms, since there is no need for more than 100Hz refresh :)
     pygame.time.delay(10)
+
+
+
+
